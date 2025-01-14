@@ -1,2 +1,3 @@
 <?php
-echo json_encode(["test"=>"1"]);
+require_once 'class/select.php';
+echo json_encode((new Select('*'))->from('planning')->where('id_terapista = 11'));

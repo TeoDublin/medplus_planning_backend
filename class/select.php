@@ -1,5 +1,7 @@
 <?php 
+    include 'sql.php';
     class Select{
+        protected $sql;
         protected $alias;
         protected $select;
         protected $from;
@@ -14,6 +16,7 @@
             $this->select=$this->where=$this->query='';
             $this->left_join=[];
             $this->select=$select;
+            $this->sql=new SQL();
         }
         public function from(string $table, $alias='x'){
             $this->alias=$alias;
@@ -43,14 +46,14 @@
                     if(preg_match('#([a-zA-Z]+)\..*#',$table,$alias)){
                         $table_no_alias=str_replace("{$alias[1]}.",'',$table);
                         $cols=[];
-                        foreach(SQL()->select("SELECT COLUMN_NAME as col FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{$table_no_alias}' AND COLUMN_NAME != 'id'") as $col){
+                        foreach($this->sql->select("SELECT COLUMN_NAME as col FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{$table_no_alias}' AND COLUMN_NAME != 'id'") as $col){
                             $cols[]="{$alias[1]}.{$col['col']}";
                         }
                         $ret=implode(',',$cols);
                         $this->select=str_replace("*{$table}*",$ret,$this->select);
                     }
                     else{
-                        $ret=SQL()->select("SELECT CONCAT('`',GROUP_CONCAT(COLUMN_NAME SEPARATOR '`,`'),'`') as cols FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{$table}' AND COLUMN_NAME != 'id'");
+                        $ret=$this->sql->select("SELECT CONCAT('`',GROUP_CONCAT(COLUMN_NAME SEPARATOR '`,`'),'`') as cols FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{$table}' AND COLUMN_NAME != 'id'");
                         $this->select=str_replace("*{$table}*",$ret[0]['cols'],$this->select);
                     }
                     
@@ -63,7 +66,7 @@
             if(!empty($this->orderby))$query.=" ORDER BY {$this->orderby}";
             if(!empty($this->limit))$query.=" LIMIT {$this->limit}";
             if(!empty($this->offset))$query.=" OFFSET {$this->offset}";
-            return SQL()->select($query) ?? [];
+            return $this->sql->select($query) ?? [];
         }
         public function first():array{
             $ret=$this->get();
@@ -98,7 +101,7 @@
         public function get_table():ResultForTable{
             if (preg_match_all("#\*(.+?)\*#", $this->select, $matches)) {
                 foreach ($matches[1] as $table) {
-                    $ret=SQL()->select("SELECT CONCAT('`',GROUP_CONCAT(COLUMN_NAME SEPARATOR '`,`'),'`') as cols FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{$table}' AND COLUMN_NAME != 'id'");
+                    $ret=$this->sql->select("SELECT CONCAT('`',GROUP_CONCAT(COLUMN_NAME SEPARATOR '`,`'),'`') as cols FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{$table}' AND COLUMN_NAME != 'id'");
                     $this->select=str_replace("*{$table}*",$ret[0]['cols'],$this->select);
                 }   
             }
@@ -106,7 +109,7 @@
             if(!empty($this->left_join))$query.=implode('',$this->left_join);
             if(!empty($this->inner_join))$query.=implode('',$this->inner_join);
             if(!empty($this->where))$query.=" WHERE {$this->where}";
-            $total= SQL()->select($query)[0]['total'];
+            $total= $this->sql->select($query)[0]['total'];
             if(!$_REQUEST['search']){
                 $this->limit??=(int)cookie('limit',14);
                 $this->offset??=((int)cookie('pagination',0)*$this->limit)??0;

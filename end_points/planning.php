@@ -6,4 +6,12 @@ $_REQUEST['data']='2024-12-30';
 $busy=$ret=[];
 $planning=(new Select('*'))->from('planning')->where("id_terapista = {$_REQUEST['id_terapista']} AND data='{$_REQUEST['data']}'")->get();
 foreach($planning as $plan)for($i=$plan['row_inizio'];$i<=$plan['row_fine'];$i++)$busy[$i]=$plan;
-echo "test4";
+foreach((new Select('*'))->from('planning_row')->get() as $row){
+    $ret[$row['id']]=[
+        'id'=>$row['id'],
+        'ora'=>$row['ora'],
+        'origin'=>$busy[$row['id']]['origin']??'free',
+        'motivo'=>$busy[$row['id']]['motivo']??'free',
+    ];
+}
+echo "test5";

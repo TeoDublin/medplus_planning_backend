@@ -6,5 +6,5 @@ $_REQUEST['data']='2024-12-30';
 $busy=$ret=[];
 $select=new Select('*');
 $planning=$select->from('planning')->where("id_terapista = {$_REQUEST['id_terapista']} AND data='{$_REQUEST['data']}'")->get();
-$row_planning=$select->from('planning_row')->get();
+
 echo "test";

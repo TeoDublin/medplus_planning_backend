@@ -1,4 +1,4 @@
-<?php 
+<?php
     require_once 'sql.php';
     class Select{
         protected $sql;
@@ -56,7 +56,6 @@
                         $ret=$this->sql->select("SELECT CONCAT('`',GROUP_CONCAT(COLUMN_NAME SEPARATOR '`,`'),'`') as cols FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{$table}' AND COLUMN_NAME != 'id'");
                         $this->select=str_replace("*{$table}*",$ret[0]['cols'],$this->select);
                     }
-                    
                 }
             }
             $query="SELECT {$this->select} FROM {$this->from}";
@@ -97,29 +96,5 @@
         public function offset(int $offset){
             $this->limit=$offset;
             return $this;
-        }
-        public function get_table():ResultForTable{
-            if (preg_match_all("#\*(.+?)\*#", $this->select, $matches)) {
-                foreach ($matches[1] as $table) {
-                    $ret=$this->sql->select("SELECT CONCAT('`',GROUP_CONCAT(COLUMN_NAME SEPARATOR '`,`'),'`') as cols FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{$table}' AND COLUMN_NAME != 'id'");
-                    $this->select=str_replace("*{$table}*",$ret[0]['cols'],$this->select);
-                }   
-            }
-            $query="SELECT count({$this->alias}.id) as total FROM {$this->from}";
-            if(!empty($this->left_join))$query.=implode('',$this->left_join);
-            if(!empty($this->inner_join))$query.=implode('',$this->inner_join);
-            if(!empty($this->where))$query.=" WHERE {$this->where}";
-            $total= $this->sql->select($query)[0]['total'];
-            if(!$_REQUEST['search']){
-                $this->limit??=(int)cookie('limit',14);
-                $this->offset??=((int)cookie('pagination',0)*$this->limit)??0;
-            }
-            else{
-                $this->limit=$total;
-                $this->offset=0;
-            }
-
-            $result=$this->get();
-            return new ResultForTable($result,$total,$this->offset,$this->limit);
         }
     }

@@ -3,15 +3,10 @@ include '../functions.php';
 include '../class/select.php';
 $_REQUEST['id_terapista']=11;
 $_REQUEST['data']='2024-12-30';
-$busy=$ret=[];
-$planning=(new Select('*'))->from('planning')->where("id_terapista = {$_REQUEST['id_terapista']} AND data='{$_REQUEST['data']}'")->get();
-foreach($planning as $plan)for($i=$plan['row_inizio'];$i<=$plan['row_fine'];$i++)$busy[$i]=$plan;
-foreach((new Select('*'))->from('planning_row')->get() as $row){
-    $ret[$row['id']]=[
-        'id'=>$row['id'],
-        'ora'=>$row['ora'],
-        'origin'=>$busy[$row['id']]['origin']??'free',
-        'motivo'=>$busy[$row['id']]['motivo']??'free',
-    ];
-}
-echo json_encode($ret);
+echo json_encode((new Select('p.*,pr.ora as ora_inizio, pe.ora as ora_fine'))
+    ->from('planning','p')
+    ->left_join('planning_row pr ON p.row_inizio = pr.ID')
+    ->left_join('planning_row pe ON p.row_fine = pe.ID')
+    ->where("p.id_terapista = {$_REQUEST['id_terapista']} AND p.data='{$_REQUEST['data']}'")
+    ->get()
+);

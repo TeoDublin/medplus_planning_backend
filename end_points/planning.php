@@ -1,6 +1,9 @@
 <?php
-include '../class/select.php';
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
 include '../functions.php';
+include '../class/select.php';
 $_REQUEST['id_terapista']=11;
 $_REQUEST['data']='2024-12-30';
 $busy=$ret=[];
@@ -14,7 +17,4 @@ foreach((new Select('*'))->from('planning_row')->get() as $row){
         'motivo'=>$busy[$row['id']]['motivo']??'free',
     ];
 }
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
 echo json_encode($ret);

@@ -14,4 +14,4 @@ foreach((new Select('*'))->from('planning_row')->get() as $row){
         'motivo'=>$busy[$row['id']]['motivo']??'free',
     ];
 }
-echo "test5";
+echo json_encode($ret);

@@ -4,20 +4,12 @@ class Sql {
     private mysqli $connection;
     private $db;
     public function __construct() {
-        switch (environment()) {
-            case 'dev':
-                $host='127.0.0.1';
-                $user='medplus';
-                $pass='123testes';
-                $db='medplus';
-                break;
-            case 'prod':
+       
                 $host='localhost';
                 $user='u482567801_medplus';
                 $pass='Medplus2024';
                 $db='u482567801_medplus';
-                break;
-        }
+        
         $this->db=$db;
         try {
             $this->connection = new mysqli($host, $user, $pass, $db);

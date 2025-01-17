@@ -8,13 +8,13 @@ class Sql {
             case 'dev':
                 $host='127.0.0.1';
                 $user='medplus';
-                $pass='123testes'; 
+                $pass='123testes';
                 $db='medplus';
                 break;
             case 'prod':
                 $host='localhost';
                 $user='u482567801_medplus';
-                $pass='Medplus2024'; 
+                $pass='Medplus2024';
                 $db='u482567801_medplus';
                 break;
         }

@@ -4,9 +4,6 @@ class Sql {
     private mysqli $connection;
     private $db;
     public function __construct() {
-        function environment():string{
-            return $_SERVER['HTTP_HOST']=='127.0.0.1:8080'?'dev':'prod';
-        }
         switch (environment()) {
             case 'dev':
                 $host='127.0.0.1';

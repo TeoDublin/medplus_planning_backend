@@ -1,5 +1,5 @@
 <?php 
-    include 'sql.php';
+    require_once 'sql.php';
     class Select{
         protected $sql;
         protected $alias;

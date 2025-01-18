@@ -3,9 +3,25 @@ include '../functions.php';
 include '../class/select.php';
 $_REQUEST['id_terapista']=11;
 $_REQUEST['data']='2025-01-18';
-$planning_row=(new Select('id,DATE_FORMAT(ora,\'%H:%m\') as ora'))->from('planning_row')->get();
+$busy=$ret=[];
+function busy_row($busy_row){
+    if(!$busy_row)return ['id'=>'-','origin'=>'-','motivo'=>'-'];
+    else return [
+        'id'=>"{$busy_row['origin']}_{$busy_row['id']}",
+        'origin'=>$busy_row['origin'] ?? '-',
+        'motivo'=>$busy_row['motivo'] ?? '-'
+    ];
+}
 $planning=(new Select('*'))->from('planning')->where("id_terapista = {$_REQUEST['id_terapista']} AND data='{$_REQUEST['data']}'")->get();
-echo json_encode((object)[
-    'planning'=>$planning,
-    'planning_row'=>$planning_row
-]);
+foreach($planning as $plan)for($i=$plan['row_inizio'];$i<=$plan['row_fine'];$i++)$busy[$i]=$plan;
+foreach((new Select('id,DATE_FORMAT(ora,\'%h:%m\')'))->from('planning_row')->get() as $row){
+    $busy_row=busy_row($busy[$row['id']]);
+    $ret[$row['id']]=[
+        'id'=>$row['id'],
+        'relate_id'=>$busy_row['id'],
+        'hour'=>$row['ora'],
+        'origin'=>$busy_row['origin'],
+        'reason'=>$busy_row['motivo'],
+    ];
+}
+echo json_encode($ret);

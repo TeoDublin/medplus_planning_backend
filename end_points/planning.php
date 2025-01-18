@@ -24,4 +24,4 @@ foreach((new Select('id,DATE_FORMAT(ora,\'%h:%m\')'))->from('planning_row')->get
         'reason'=>$busy_row['motivo'],
     ];
 }
-echo json_encode($ret);
+echo json_encode((object)['planning_row'=>$ret]);

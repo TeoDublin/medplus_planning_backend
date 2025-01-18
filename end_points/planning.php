@@ -37,6 +37,7 @@ for( $i=0;$i<$total;$i++){
             'id'=>$busy_row['id'],
             'plan'=>"{$row['hour']}-{$planning_row[$id]['hour']}: {$busy_row['reason']}"
         ];
+        $skip=1;
     }
 }
 echo json_encode((object)['planning_row'=>$ret]);

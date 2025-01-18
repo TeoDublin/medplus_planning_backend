@@ -29,7 +29,7 @@ for( $i=0;$i<$total;$i++){
                 $skip++;
                 $row_id++;
             }
-            $id=$skip+$i-1;
+            $id=$skip+$i;
         }
         else $id=$row_id;
         

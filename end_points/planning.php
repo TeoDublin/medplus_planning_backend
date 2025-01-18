@@ -18,7 +18,7 @@ foreach((new Select('id,DATE_FORMAT(ora,\'%H:%m\') as hour'))->from('planning_ro
     $busy_row=busy_row($busy[$row['id']]);
     $ret[]=[
         'id'=>$row['id'],
-        'relate_id'=>$busy_row['id'],
+        'related_id'=>$busy_row['id'],
         'hour'=>$row['hour'],
         'origin'=>$busy_row['origin'],
         'reason'=>$busy_row['reason'],

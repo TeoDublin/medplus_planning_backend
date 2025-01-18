@@ -20,6 +20,7 @@ for( $i=0;$i<$total;$i++){
     $row=$planning_row[$i];
     $row_id=$i+1;
     if(--$skip<=0){
+        if($skip<0)$skip=0;
         $busy_row=busy_row($busy[$row_id]);
         $related_id=$busy_row['id'];
         if($related_id==busy_row($busy[$row_id+1])['id']){
@@ -37,7 +38,6 @@ for( $i=0;$i<$total;$i++){
             'id'=>$busy_row['id'],
             'plan'=>"{$row['hour']}-{$planning_row[$id]['hour']}: {$busy_row['reason']}"
         ];
-        $skip=1;
     }
 }
 echo json_encode((object)['planning_row'=>$ret]);

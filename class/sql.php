@@ -5,6 +5,12 @@ class Sql {
     private $db;
     public function __construct() {
         switch (environment()) {
+            case 'test_prod':
+                $host='auth-db1582.hstgr.io';
+                $user='u482567801_medplus_prod';
+                $pass='U482567801_medplus_prod';
+                $db='u482567801_medplus_prod';
+                break;
             case 'dev':
                 $host='127.0.0.1';
                 $user='medplus';

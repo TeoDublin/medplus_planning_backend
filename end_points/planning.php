@@ -14,7 +14,7 @@ function busy_row($busy_row){
 }
 $planning=(new Select('*'))->from('planning')->where("id_terapista = {$_REQUEST['id_terapista']} AND data='{$_REQUEST['data']}'")->get();
 foreach($planning as $plan)for($i=$plan['row_inizio'];$i<=$plan['row_fine'];$i++)$busy[$i]=$plan;
-foreach((new Select('id,DATE_FORMAT(ora,\'%h:%m\') as hour'))->from('planning_row')->get() as $row){
+foreach((new Select('id,DATE_FORMAT(ora,\'%H:%m\') as hour'))->from('planning_row')->get() as $row){
     $busy_row=busy_row($busy[$row['id']]);
     $ret[]=[
         'id'=>$row['id'],

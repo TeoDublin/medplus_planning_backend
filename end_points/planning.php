@@ -13,7 +13,7 @@ function busy_row($busy_row){
     ];
 }
 $planning_row=(new Select('id,DATE_FORMAT(ora,\'%H:%i\') as hour'))->from('planning_row')->get();
-$total=count($planning_row)-1;
+$total=count($planning_row);
 $planning=(new Select('*'))->from('planning')->where("id_terapista = {$_REQUEST['id_terapista']} AND data='{$_REQUEST['data']}'")->get();
 foreach($planning as $plan)for($i=$plan['row_inizio'];$i<=$plan['row_fine'];$i++)$busy[$i]=$plan;
 for( $i=0;$i<=$total;$i++){

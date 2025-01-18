@@ -29,7 +29,7 @@ for( $i=0;$i<$total;$i++){
         
         $ret[]=[
             'id'=>$busy_row['id'],
-            'plan'=>"{$row['hour']} - {$planning_row[$id]['hour']}: {$busy_row['reason']}"
+            'plan'=>"{$row['hour']}-{$planning_row[$id]['hour']}: {$busy_row['reason']}"
         ];
     }
     else --$skip;

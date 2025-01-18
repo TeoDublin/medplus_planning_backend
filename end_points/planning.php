@@ -9,19 +9,19 @@ function busy_row($busy_row){
     else return [
         'id'=>"{$busy_row['origin']}_{$busy_row['id']}",
         'origin'=>$busy_row['origin'] ?? '-',
-        'motivo'=>$busy_row['motivo'] ?? '-'
+        'reason'=>$busy_row['motivo'] ?? '-'
     ];
 }
 $planning=(new Select('*'))->from('planning')->where("id_terapista = {$_REQUEST['id_terapista']} AND data='{$_REQUEST['data']}'")->get();
 foreach($planning as $plan)for($i=$plan['row_inizio'];$i<=$plan['row_fine'];$i++)$busy[$i]=$plan;
-foreach((new Select('id,DATE_FORMAT(ora,\'%h:%m\')'))->from('planning_row')->get() as $row){
+foreach((new Select('id,DATE_FORMAT(ora,\'%h:%m\') as hour'))->from('planning_row')->get() as $row){
     $busy_row=busy_row($busy[$row['id']]);
     $ret[]=[
         'id'=>$row['id'],
         'relate_id'=>$busy_row['id'],
-        'hour'=>$row['ora'],
+        'hour'=>$row['hour'],
         'origin'=>$busy_row['origin'],
-        'reason'=>$busy_row['motivo'],
+        'reason'=>$busy_row['reason'],
     ];
 }
 echo json_encode((object)['planning_row'=>$ret]);

@@ -19,7 +19,7 @@ foreach($planning as $plan)for($i=$plan['row_inizio'];$i<=$plan['row_fine'];$i++
 for( $i=0;$i<$total;$i++){
     $row=$planning_row[$i];
     $row_id=$i+1;
-    if(--$skip==0){
+    if(--$skip<=0){
         $busy_row=busy_row($busy[$row_id]);
         $related_id=$busy_row['id'];
         if($related_id==busy_row($busy[$row_id+1])['id']){

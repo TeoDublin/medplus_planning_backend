@@ -9,9 +9,9 @@ foreach($planning as $plan)for($i=$plan['row_inizio'];$i<=$plan['row_fine'];$i++
 foreach((new Select('*'))->from('planning_row')->get() as $row){
     $ret[$row['id']]=[
         'id'=>$row['id'],
-        'ora'=>$row['ora'],
+        'hour'=>$row['ora'],
         'origin'=>$busy[$row['id']]['origin']??'free',
-        'motivo'=>$busy[$row['id']]['motivo']??'free',
+        'reason'=>$busy[$row['id']]['motivo']??'free',
     ];
 }
 echo json_encode($ret);

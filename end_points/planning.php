@@ -16,7 +16,7 @@ $planning=(new Select('*'))->from('planning')->where("id_terapista = {$_REQUEST[
 foreach($planning as $plan)for($i=$plan['row_inizio'];$i<=$plan['row_fine'];$i++)$busy[$i]=$plan;
 foreach((new Select('id,DATE_FORMAT(ora,\'%h:%m\')'))->from('planning_row')->get() as $row){
     $busy_row=busy_row($busy[$row['id']]);
-    $ret[$row['id']]=[
+    $ret[]=[
         'id'=>$row['id'],
         'relate_id'=>$busy_row['id'],
         'hour'=>$row['ora'],
